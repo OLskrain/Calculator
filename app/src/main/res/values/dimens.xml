@@ -1,0 +1,18 @@
+<resources>
+
+    <dimen name="card_album_radius">15dp</dimen>
+    <dimen name="margin_start">8dp</dimen>
+    <dimen name="margin_top">8dp</dimen>
+    <dimen name="margin_end">8dp</dimen>
+    <dimen name="margin_bottom">8dp</dimen>
+
+    <dimen name="text_padding_start">20dp</dimen>
+    <dimen name="text_padding_end">20dp</dimen>
+    <dimen name="text_size_36">36sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="tv_answer_height">0dp</dimen>
+    <dimen name="button_width">0dp</dimen>
+    <dimen name="button_height">0dp</dimen>
+
+
+</resources>
