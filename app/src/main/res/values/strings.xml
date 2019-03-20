@@ -21,6 +21,7 @@
     <string name="symbol_plus">+</string>
     <string name="symbol_division">/</string>
     <string name="symbol_multiplication">x</string>
+    <string name="symbol_multiplication2">*</string>
 
     <string name="delete">DEL</string>
     <string name="ac">AC</string>

@@ -53,7 +53,7 @@
         android:background="@drawable/button_border"
         android:text="@string/number_1"
         android:textSize="@dimen/text_size_18"
-        app:layout_constraintBottom_toTopOf="@+id/button_zero"
+        app:layout_constraintBottom_toTopOf="@+id/button_number_0"
         app:layout_constraintEnd_toStartOf="@+id/button_number_2"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -71,13 +71,13 @@
         android:text="@string/symbol_unary_minus"
         android:textSize="@dimen/text_size_18"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_point"
+        app:layout_constraintEnd_toStartOf="@+id/button_symbol_point"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/button_zero"
+        app:layout_constraintStart_toEndOf="@+id/button_number_0"
         app:layout_constraintTop_toBottomOf="@+id/button_number_2" />
 
     <Button
-        android:id="@+id/button_point"
+        android:id="@+id/button_symbol_point"
         android:layout_width="@dimen/button_width"
         android:layout_height="@dimen/button_height"
         android:layout_marginEnd="@dimen/margin_end"
@@ -100,7 +100,7 @@
         android:background="@drawable/button_border"
         android:text="@string/number_3"
         android:textSize="@dimen/text_size_18"
-        app:layout_constraintBottom_toTopOf="@+id/button_point"
+        app:layout_constraintBottom_toTopOf="@+id/button_symbol_point"
         app:layout_constraintEnd_toStartOf="@+id/button_symbol_equally"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button_number_2"
@@ -113,7 +113,7 @@
         android:background="@drawable/button_border"
         android:text="@string/symbol_equally"
         android:textSize="@dimen/text_size_36"
-        app:layout_constraintBottom_toBottomOf="@+id/button_point"
+        app:layout_constraintBottom_toBottomOf="@+id/button_symbol_point"
         app:layout_constraintEnd_toEndOf="@+id/button_symbol_minus"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/button_symbol_plus"
@@ -136,7 +136,7 @@
         app:layout_constraintTop_toBottomOf="@+id/button_number_8" />
 
     <Button
-        android:id="@+id/button_zero"
+        android:id="@+id/button_number_0"
         android:layout_width="@dimen/button_width"
         android:layout_height="@dimen/button_height"
         android:layout_marginStart="@dimen/margin_start"
