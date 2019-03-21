@@ -25,6 +25,7 @@ import timber.log.Timber;
 public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @BindView(R.id.answer) TextView answer;
+    @BindView(R.id.mistake) TextView mistake;
     @BindView(R.id.button_number_1) Button numberOne;
     @BindView(R.id.button_number_2) Button numberTwo;
     @BindView(R.id.button_number_3) Button numberThree;
@@ -64,11 +65,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Override
     public void initUi() {
         answer.setMovementMethod(new ScrollingMovementMethod());
-        Calcul calcul = new Calcul();
-        String x = calcul.ExpressionToRPN("(5.2-5.1)+1");
-        java.math.BigDecimal y = calcul.RPNToAnswer(x);
-        Timber.d("sdf " + x);
-        Timber.d("sdf " + y);
         initOnClick();
     }
 
@@ -105,7 +101,12 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     }
 
     @Override
-    public void snowResult(String result) {
+    public void showResult(StringBuilder result) {
+        answer.setText(result);
+    }
 
+    @Override
+    public void showError(String error) {
+        mistake.setText(error);
     }
 }

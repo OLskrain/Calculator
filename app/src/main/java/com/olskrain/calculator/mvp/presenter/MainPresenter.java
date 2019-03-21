@@ -16,24 +16,36 @@ import timber.log.Timber;
 @InjectViewState
 public class MainPresenter extends MvpPresenter<MainView> {
 
-    //Todo: сделать проверку на поворный знак точки
     private Calcul calcul = new Calcul();
     private Expression expression = new Expression();
 
     public void createExpression(String token) {
         expression.addTokenToExpression(token);
+        getViewState().showResult(expression.showExpression());
     }
 
     public void changeExpression(Command command){
         switch (command){
             case DELETE:
                 expression.deleteTokenFromExpression();
+                getViewState().showResult(expression.showExpression());
+                getViewState().showError("");
                 break;
             case ClEAR:
                 expression.clearExpression();
+                getViewState().showResult(expression.showExpression());
+                getViewState().showError("");
+                expression.setError(false);
                 break;
             case GET_RESULT:
-                Timber.d("srr" + "получить результат");
+                if(!expression.isError()){
+                    getViewState().showResult(calcul.RPNToAnswer(calcul.ExpressionToRPN(expression.showExpression())));
+                    expression.clearExpression();
+                    expression.setError(false);
+                }else {
+                    getViewState().showResult(expression.showExpression());
+                    getViewState().showError("Error");
+                }
                 break;
             case CHANGE_SIGN:
                 Timber.d("srr" + "сменить знак");

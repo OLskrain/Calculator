@@ -10,9 +10,13 @@
     <dimen name="text_padding_end">20dp</dimen>
     <dimen name="text_size_36">36sp</dimen>
     <dimen name="text_size_18">18sp</dimen>
-    <dimen name="tv_answer_height">0dp</dimen>
+    <dimen name="tv_height_0dp">0dp</dimen>
     <dimen name="button_width">0dp</dimen>
     <dimen name="button_height">0dp</dimen>
+    <dimen name="margin_start_2dp">2dp</dimen>
+    <dimen name="margin_end_2dp">2dp</dimen>
+    <dimen name="margin_bottom_2dp">2dp</dimen>
+    <dimen name="elevation_mistake">1dp</dimen>
 
 
 </resources>

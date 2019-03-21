@@ -12,7 +12,7 @@ import timber.log.Timber;
 
 public class Calcul {
 
-    public String ExpressionToRPN(String expr) {
+    public String ExpressionToRPN(StringBuilder expr) {
         String current = "";
         Stack<Character> stack = new Stack<>();
 
@@ -37,10 +37,15 @@ public class Calcul {
             }
             if (priority == -1) {
                 current += ' ';
-                while (getP(stack.peek()) != 1) {
-                    current += stack.pop();
+                while (!stack.empty()) {
+                    if (getP(stack.peek()) != 1){
+                        current += stack.pop();
+                    }else break;
                 }
-                stack.pop();
+                if (!stack.empty()){
+                    stack.pop();
+                }
+
             }
         }
 
@@ -50,8 +55,8 @@ public class Calcul {
         return current;
     }
 
-    public BigDecimal RPNToAnswer(String rpn) {
-        String operand = new String();
+    public StringBuilder RPNToAnswer(String rpn) {
+        String operand = "";
         Stack<Double> stack = new Stack<>();
 
         for (int i = 0; i < rpn.length(); i++) {
@@ -66,7 +71,7 @@ public class Calcul {
                     }
                 }
                 stack.push(Double.parseDouble(operand));
-                operand = new String();
+                operand = "";
             }
             if (getP(rpn.charAt(i)) > 1) {
                 double a = stack.pop(), b = stack.pop();
@@ -85,8 +90,15 @@ public class Calcul {
             }
         }
 
-        BigDecimal bd = new BigDecimal(stack.pop()).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros();
-        return bd;
+        StringBuilder stringBuilder = new StringBuilder();
+        if(!stack.empty()){
+            BigDecimal bd = new BigDecimal(stack.pop()).setScale(5, RoundingMode.HALF_UP).stripTrailingZeros();
+            stringBuilder.append(bd);
+        } else {
+            stringBuilder.append(' ');
+        }
+
+        return stringBuilder;
     }
 
     private int getP(char token) {

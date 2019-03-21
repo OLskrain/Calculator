@@ -11,5 +11,6 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 @StateStrategyType(SingleStateStrategy.class)
 public interface MainView extends MvpView {
     void initUi();
-    void snowResult(String result);
+    void showResult(StringBuilder result);
+    void showError(String error);
 }
