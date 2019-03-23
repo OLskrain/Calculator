@@ -4,18 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import timber.log.Timber;
-
 /**
  * Created by Andrey Ievlev on 19,Март,2019
  */
 public class Expression {
-
     private List<String> list = new ArrayList<>();
     private boolean isError;
     private boolean isErrorTokens;
     private boolean isMathOperator;
-
 
     public boolean isError() {
         return isError;
@@ -43,7 +39,7 @@ public class Expression {
         list.clear();
     }
 
-    public StringBuilder showExpression() {
+    public String showExpression() {
         StringBuilder expression = new StringBuilder();
         checkError();
         for (int i = 0; i < list.size(); i++) {
@@ -51,18 +47,14 @@ public class Expression {
         }
         isErrorTokens = false;
         isMathOperator = false;
-        return expression;
+        return expression.toString();
     }
 
     private void checkError() {
         checkErrorTokens();
         if (checkErrorStartOrEnd() || checkErrorBrackets() || isErrorTokens || !isMathOperator) {
-            //if (checkErrorBrackets()){
-            // if (isErrorTokens){
             isError = true;
-        } else {
-            isError = false;
-        }
+        } else isError = false;
     }
 
     private void checkErrorTokens() { //Проверка на две и более бинарных фунции или точки рядом
@@ -115,10 +107,8 @@ public class Expression {
         if (list.size() > 0) {
             String finalValue = list.get(list.size() - 1);
             String initial = list.get(0);
-            if (initial.equals("*") || initial.equals("/") || initial.equals(".") ||
-                    finalValue.equals("*") || finalValue.equals("/") || finalValue.equals("+") || finalValue.equals("-") || finalValue.equals(".")) {
-                return true;
-            }
+            return initial.equals("*") || initial.equals("/") || initial.equals(".") ||
+                    finalValue.equals("*") || finalValue.equals("/") || finalValue.equals("+") || finalValue.equals("-") || finalValue.equals(".");
         }
         return false;
     }
@@ -136,17 +126,13 @@ public class Expression {
                     return true;
                 }
 
-                String c = stack.pop();
+                String st = stack.pop();
 
-                if (!(c.equals("(") && current.equals(")"))) {
+                if (!(st.equals("(") && current.equals(")"))) {
                     return true;
                 }
             }
         }
-
-        if (!stack.isEmpty()) {
-            return true;
-        }
-        return false;
+        return !stack.isEmpty();
     }
 }

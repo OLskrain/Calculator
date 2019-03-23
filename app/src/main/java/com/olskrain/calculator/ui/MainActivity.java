@@ -101,7 +101,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     }
 
     @Override
-    public void showResult(StringBuilder result) {
+    public void showResult(String result) {
         answer.setText(result);
     }
 
