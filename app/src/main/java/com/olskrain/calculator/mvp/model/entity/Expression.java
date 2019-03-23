@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import timber.log.Timber;
+
 /**
  * Created by Andrey Ievlev on 19,Март,2019
  */
@@ -13,7 +15,33 @@ public class Expression {
     private boolean isErrorTokens;
     private boolean isMathOperator;
 
-    public boolean isError() {
+    private final String NUMBER = "0123456789";
+    private final String OPERATORS = "+-*/";
+    private final String SEPARATOR = ".";
+    private final String OPEN_BRACKET = "(";
+    private final String CLOSE_BRACKET = ")";
+
+    private boolean isNumber(String token) {
+        return NUMBER.contains(token);
+    }
+
+    private boolean isSeparator(String token) {
+        return token.equals(SEPARATOR);
+    }
+
+    private boolean isOpenBracket(String token) {
+        return token.equals(OPEN_BRACKET);
+    }
+
+    private boolean isCloseBracket(String token) {
+        return token.equals(CLOSE_BRACKET);
+    }
+
+    private boolean isOperator(String token) {
+        return OPERATORS.contains(token);
+    }
+
+    public boolean getIsError() {
         return isError;
     }
 
@@ -39,6 +67,27 @@ public class Expression {
         list.clear();
     }
 
+    public void changeSing() { //метод смены знака
+        for (int i = list.size() - 1; i + 1 > 0; i--) {
+            if (list.get(i).equals("+")) {
+                list.set(i, "-");
+                break;
+            } else if (list.get(i).equals("-")) {
+                list.set(i, "+");
+                break;
+            } else if (list.get(i).equals("*") || list.get(i).equals("/")) {
+                String string = list.get(i + 1).replace("(-", "-").replace("(","").replace(")","");
+                list.set(i + 1, "(" + Integer.parseInt(string) * (-1) + ")");
+                break;
+            } else if (list.get(i).equals("(")) {
+                list.set(i + 1, Integer.toString(Integer.parseInt(list.get(i + 1)) * (-1)));
+                break;
+            } else if (i == 0){
+                list.set(i, Integer.toString(Integer.parseInt(list.get(i)) * (-1)));
+            }
+        }
+    }
+
     public String showExpression() {
         StringBuilder expression = new StringBuilder();
         checkError();
@@ -62,40 +111,39 @@ public class Expression {
             //Todo: заменить на поток
             String current = list.get(i);
 
-            if (current.equals("*") || current.equals("/") || current.equals("+") || current.equals("-")) {
+            if (isOperator(current)) { //проверка на то, есть ли вообше матет. действия
                 isMathOperator = true;
             }
 
-            if (current.equals("*") || current.equals("/") || current.equals("+") || current.equals("-") || current.equals(".")) {
+            if (isOperator(current) || isSeparator(current)) { //проверка на конструкции "MOMO", "MO.", "MO)", ".MO", "..", ".)" , где MO- математюоператор
                 if (list.size() > 1 && i < list.size() - 1) {
                     String next = list.get(i + 1);
-                    if (next.equals("*") || next.equals("/") || next.equals("+") || next.equals("-") || next.equals(".") || next.equals(")")) {
+                    if (isOperator(next) || isSeparator(next) || isCloseBracket(next)) {
                         isErrorTokens = true;
                     }
                 }
             }
 
-            if (current.equals(".")) {
+            if (isSeparator(current)) { //проверка на конструкцию ".("
                 if (list.size() > 1 && i < list.size() - 1) {
                     String next = list.get(i + 1);
-                    if (next.equals("(")) {
+                    if (isOpenBracket(next)) {
                         isErrorTokens = true;
                     }
                 }
             }
 
-            if (current.equals("0") || current.equals("1") || current.equals("2") || current.equals("3") || current.equals("4") || current.equals("5") ||
-                    current.equals("6") || current.equals("7") || current.equals("8") || current.equals("9")) {
+            if (isNumber(current)) {  //проверка на конструкцию "n(", где n число
                 if (list.size() > 1 && i < list.size() - 1) {
                     String next = list.get(i + 1);
-                    if (next.equals("(")) {
+                    if (isOpenBracket(next)) {
                         isErrorTokens = true;
                     }
                 }
 
-                if (list.size() > 1 && i > 0) {
+                if (list.size() > 1 && i > 0) { //проверка на конструкцию ")n", где n число
                     String previous = list.get(i - 1);
-                    if (previous.equals(")")) {
+                    if (isCloseBracket(previous)) {
                         isErrorTokens = true;
                     }
                 }
@@ -107,8 +155,8 @@ public class Expression {
         if (list.size() > 0) {
             String finalValue = list.get(list.size() - 1);
             String initial = list.get(0);
-            return initial.equals("*") || initial.equals("/") || initial.equals(".") ||
-                    finalValue.equals("*") || finalValue.equals("/") || finalValue.equals("+") || finalValue.equals("-") || finalValue.equals(".");
+            return initial.equals("*") || initial.equals("/") || isSeparator(initial) ||
+                    isOperator(finalValue) || isSeparator(finalValue);
         }
         return false;
     }
@@ -119,16 +167,15 @@ public class Expression {
         for (int i = 0; i < list.size(); i++) { //Todo: заменить на поток
             String current = list.get(i);
 
-            if (current.equals("(")) {
+            if (isOpenBracket(current)) {
                 stack.push(current);
-            } else if (current.equals(")")) {
+            } else if (isCloseBracket(current)) {
                 if (stack.isEmpty()) {
                     return true;
                 }
 
                 String st = stack.pop();
-
-                if (!(st.equals("(") && current.equals(")"))) {
+                if (!(isOpenBracket(st) && isCloseBracket(current))) {
                     return true;
                 }
             }

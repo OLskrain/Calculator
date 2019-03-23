@@ -38,17 +38,22 @@ public class MainPresenter extends MvpPresenter<MainView> {
                 expression.setError(false);
                 break;
             case GET_RESULT:
-                if(!expression.isError()){
-                    getViewState().showResult(calcul.RPNToAnswer(calcul.ExpressionToRPN(expression.showExpression())));
+                if(!expression.getIsError()){
+                    String st = calcul.RPNToAnswer(calcul.ExpressionToRPN(expression.showExpression()));
+                    getViewState().showResult(st);
                     expression.clearExpression();
                     expression.setError(false);
+                    getViewState().showError("");
+                    createExpression(st);
                 }else {
                     getViewState().showResult(expression.showExpression());
                     getViewState().showError("Error");
                 }
                 break;
             case CHANGE_SIGN:
-                Timber.d("srr" + "сменить знак");
+                expression.changeSing();
+                getViewState().showResult(expression.showExpression());
+                getViewState().showError("");
                 break;
         }
     }
