@@ -1,6 +1,8 @@
 package com.olskrain.calculator.ui;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.method.ScrollingMovementMethod;
 import android.widget.Button;
 import android.widget.TextView;
@@ -50,6 +52,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @BindView(R.id.button_del) Button del;
     @BindView(R.id.button_ac) Button ac;
 
+    Vibrator vib;
     @InjectPresenter
     MainPresenter mainPresenter;
 
@@ -65,34 +68,81 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Override
     public void initUi() {
         answer.setMovementMethod(new ScrollingMovementMethod());
+        vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         initOnClick();
     }
 
     private void initOnClick() {
-        numberOne.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.number_1)));
-        numberTwo.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.number_2)));
-        numberThree.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.number_3)));
-        numberFour.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.number_4)));
-        numberFive.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.number_5)));
-        numberSix.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.number_6)));
-        numberSeven.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.number_7)));
-        numberEight.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.number_8)));
-        numberNine.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.number_9)));
-        numberZero.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.number_0)));
+        numberOne.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.number_1));
+        });
+        numberTwo.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.number_2));
+        });
+        numberThree.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.number_3));
+        });
+        numberFour.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.number_4));
+        });
+        numberFive.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.number_5));
+        });
+        numberSix.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.number_6));
+        });
+        numberSeven.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.number_7));
+        });
+        numberEight.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.number_8));
+        });
+        numberNine.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.number_9));
+        });
+        numberZero.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.number_0));
+        });
 
-        bracketOpen.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.symbol_bracket_open)));
-        bracketClose.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.symbol_bracket_close)));
-        multiplication.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.symbol_multiplication2)));
-        division.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.symbol_division)));
-        plus.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.symbol_plus)));
-        minus.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.symbol_minus)));
-        point.setOnClickListener(v -> mainPresenter.createExpression(getResources().getString(R.string.symbol_point)));
+        bracketOpen.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.symbol_bracket_open));
+        });
+        bracketClose.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.symbol_bracket_close));
+        });
+        multiplication.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.symbol_multiplication2));
+        });
+        division.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.symbol_division));
+        });
+        plus.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.symbol_plus));
+        });
+        minus.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.symbol_minus));
+        });
+        point.setOnClickListener(v -> { vibRun();
+            mainPresenter.createExpression(getResources().getString(R.string.symbol_point));
+        });
 
-        equally.setOnClickListener(v -> mainPresenter.changeExpression(Command.GET_RESULT));
-        unaryMinus.setOnClickListener(v -> mainPresenter.changeExpression(Command.CHANGE_SIGN));
+        equally.setOnClickListener(v -> { vibRun();
+            mainPresenter.changeExpression(Command.GET_RESULT);
+        });
+        unaryMinus.setOnClickListener(v -> { vibRun();
+            mainPresenter.changeExpression(Command.CHANGE_SIGN);
+        });
 
-        del.setOnClickListener(v -> mainPresenter.changeExpression(Command.DELETE));
-        ac.setOnClickListener(v -> mainPresenter.changeExpression(Command.ClEAR));
+        del.setOnClickListener(v -> { vibRun();
+            mainPresenter.changeExpression(Command.DELETE);
+        });
+        ac.setOnClickListener(v -> { vibRun();
+            mainPresenter.changeExpression(Command.ClEAR);
+        });
+    }
+
+    private void vibRun(){
+        vib.vibrate(25);
     }
 
     @ProvidePresenter
