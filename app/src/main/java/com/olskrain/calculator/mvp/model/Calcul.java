@@ -100,7 +100,7 @@ public class Calcul {
         String answer;
         if (!stackRPN.empty()) {
             BigDecimal bd = new BigDecimal(stackRPN.pop()).setScale(5, RoundingMode.HALF_UP).stripTrailingZeros();
-            answer = "" + bd.toPlainString();
+            answer = "" + bd.intValueExact();
         } else {
             answer = "";
         }
