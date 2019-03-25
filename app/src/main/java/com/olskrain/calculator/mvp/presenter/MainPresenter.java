@@ -18,10 +18,20 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     private Calcul calcul = new Calcul();
     private Expression expression = new Expression();
+    private boolean isResult;
 
     public void createExpression(String token) {
-        expression.addTokenToExpression(token);
-        getViewState().showResult(expression.showExpression());
+        if (isResult && !expression.isOperator(token)) {
+            expression.clearExpression();
+            expression.addTokenToExpression(token);
+
+            getViewState().showResult(expression.showExpression());
+            isResult = false;
+        }else {
+            expression.addTokenToExpression(token);
+            getViewState().showResult(expression.showExpression());
+            isResult = false;
+        }
     }
 
     public void changeExpression(Command command){
@@ -36,6 +46,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
                 getViewState().showResult(expression.showExpression());
                 getViewState().showError("");
                 expression.setError(false);
+                isResult = false;
                 break;
             case GET_RESULT:
                 if(!expression.getIsError()){
@@ -45,6 +56,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
                     expression.setError(false);
                     getViewState().showError("");
                     createExpression(st);
+                    isResult = true;
                 }else {
                     getViewState().showResult(expression.showExpression());
                     getViewState().showError("Error");

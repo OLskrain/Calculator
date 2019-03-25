@@ -37,7 +37,7 @@ public class Expression {
         return token.equals(CLOSE_BRACKET);
     }
 
-    private boolean isOperator(String token) {
+    public boolean isOperator(String token) {
         return OPERATORS.contains(token);
     }
 

@@ -100,10 +100,12 @@ public class Calcul {
         String answer;
         if (!stackRPN.empty()) {
             BigDecimal bd = new BigDecimal(stackRPN.pop()).setScale(5, RoundingMode.HALF_UP).stripTrailingZeros();
+            //TODO: разобраться с нулем
             answer = "" + bd.toPlainString();
+            answer.replace("0.00000", "0");
         } else {
             answer = "";
-        }
+       }
         return answer;
     }
 
