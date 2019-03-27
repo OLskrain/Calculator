@@ -1,16 +1,19 @@
 package com.olskrain.calculator.mvp.model.entity;
 
+import android.annotation.SuppressLint;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import timber.log.Timber;
+import io.reactivex.Observable;
 
 /**
  * Created by Andrey Ievlev on 19,Март,2019
  */
 public class Expression {
     private List<String> list = new ArrayList<>();
+    Observable<String> observable;
     private boolean isError;
     private boolean isErrorTokens;
     private boolean isMathOperator;
@@ -88,12 +91,14 @@ public class Expression {
         }
     }
 
+    @SuppressLint("CheckResult")
     public String showExpression() {
         StringBuilder expression = new StringBuilder();
+
+        observable = Observable.fromIterable(list);
+        observable.subscribe(s -> expression.append(s));
         checkError();
-        for (int i = 0; i < list.size(); i++) {
-            expression.append(list.get(i));
-        }
+
         isErrorTokens = false;
         isMathOperator = false;
         return expression.toString();
@@ -101,54 +106,50 @@ public class Expression {
 
     private void checkError() {
         checkErrorTokens();
-        if (checkErrorStartOrEnd() || checkErrorBrackets() || isErrorTokens || !isMathOperator) {
-            isError = true;
-        } else isError = false;
+        isError = checkErrorStartOrEnd() || checkErrorBrackets() || isErrorTokens || !isMathOperator;
     }
 
+    @SuppressLint("CheckResult")
     private void checkErrorTokens() { //Проверка на две и более бинарных фунции или точки рядом
-        for (int i = 0; i < list.size(); i++) {
-            //Todo: заменить на поток
-            String current = list.get(i);
-
-            if (isOperator(current)) { //проверка на то, есть ли вообше матет. действия
+        observable.subscribe(s -> {
+            if (isOperator(s)) { //проверка на то, есть ли вообше матет. действия
                 isMathOperator = true;
             }
 
-            if (isOperator(current) || isSeparator(current)) { //проверка на конструкции "MOMO", "MO.", "MO)", ".MO", "..", ".)" , где MO- математюоператор
-                if (list.size() > 1 && i < list.size() - 1) {
-                    String next = list.get(i + 1);
+            if (isOperator(s) || isSeparator(s)) { //проверка на конструкции "MOMO", "MO.", "MO)", ".MO", "..", ".)" , где MO- математюоператор
+                if (list.size() > 1 && list.indexOf(s) < list.size() - 1) {
+                    String next = list.get(list.indexOf(s) + 1);
                     if (isOperator(next) || isSeparator(next) || isCloseBracket(next)) {
                         isErrorTokens = true;
                     }
                 }
             }
 
-            if (isSeparator(current)) { //проверка на конструкцию ".("
-                if (list.size() > 1 && i < list.size() - 1) {
-                    String next = list.get(i + 1);
+            if (isSeparator(s)) { //проверка на конструкцию ".("
+                if (list.size() > 1 && list.indexOf(s) < list.size() - 1) {
+                    String next = list.get(list.indexOf(s) + 1);
                     if (isOpenBracket(next)) {
                         isErrorTokens = true;
                     }
                 }
             }
 
-            if (isNumber(current)) {  //проверка на конструкцию "n(", где n число
-                if (list.size() > 1 && i < list.size() - 1) {
-                    String next = list.get(i + 1);
+            if (isNumber(s)) {  //проверка на конструкцию "n(", где n число
+                if (list.size() > 1 && list.indexOf(s) < list.size() - 1) {
+                    String next = list.get(list.indexOf(s) + 1);
                     if (isOpenBracket(next)) {
                         isErrorTokens = true;
                     }
                 }
 
-                if (list.size() > 1 && i > 0) { //проверка на конструкцию ")n", где n число
-                    String previous = list.get(i - 1);
+                if (list.size() > 1 && list.indexOf(s) > 0) { //проверка на конструкцию ")n", где n число
+                    String previous = list.get(list.indexOf(s) - 1);
                     if (isCloseBracket(previous)) {
                         isErrorTokens = true;
                     }
                 }
             }
-        }
+        });
     }
 
     private boolean checkErrorStartOrEnd() {  //проверка на наличие бинарной функции в начале или конце строки
