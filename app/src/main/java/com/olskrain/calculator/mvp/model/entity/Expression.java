@@ -90,29 +90,28 @@ public class Expression {
 
     public String showExpression() {
         StringBuilder expression = new StringBuilder();
-        checkError();
         for (int i = 0; i < list.size(); i++) {
             expression.append(list.get(i));
+            checkError(i);
         }
         isErrorTokens = false;
         isMathOperator = false;
         return expression.toString();
     }
 
-    private void checkError() {
-        checkErrorTokens();
-        if (checkErrorStartOrEnd() || checkErrorBrackets() || isErrorTokens || !isMathOperator) {
-            isError = true;
-        } else isError = false;
+    private void checkError(int i) {
+        checkErrorTokens(i);
+        isError = checkErrorStartOrEnd() || checkErrorBrackets() || isErrorTokens || !isMathOperator;
     }
 
-    private void checkErrorTokens() { //Проверка на две и более бинарных фунции или точки рядом
-        for (int i = 0; i < list.size(); i++) {
+    private void checkErrorTokens(int i) { //Проверка на две и более бинарных фунции или точки рядом
+            Timber.d("dsa начало");
             //Todo: заменить на поток
             String current = list.get(i);
 
             if (isOperator(current)) { //проверка на то, есть ли вообше матет. действия
                 isMathOperator = true;
+                return;
             }
 
             if (isOperator(current) || isSeparator(current)) { //проверка на конструкции "MOMO", "MO.", "MO)", ".MO", "..", ".)" , где MO- математюоператор
@@ -120,6 +119,7 @@ public class Expression {
                     String next = list.get(i + 1);
                     if (isOperator(next) || isSeparator(next) || isCloseBracket(next)) {
                         isErrorTokens = true;
+                        return;
                     }
                 }
             }
@@ -129,6 +129,7 @@ public class Expression {
                     String next = list.get(i + 1);
                     if (isOpenBracket(next)) {
                         isErrorTokens = true;
+                        return;
                     }
                 }
             }
@@ -138,6 +139,7 @@ public class Expression {
                     String next = list.get(i + 1);
                     if (isOpenBracket(next)) {
                         isErrorTokens = true;
+                        return;
                     }
                 }
 
@@ -145,10 +147,11 @@ public class Expression {
                     String previous = list.get(i - 1);
                     if (isCloseBracket(previous)) {
                         isErrorTokens = true;
+                        return;
                     }
                 }
+                Timber.d("dsa конец");
             }
-        }
     }
 
     private boolean checkErrorStartOrEnd() {  //проверка на наличие бинарной функции в начале или конце строки
