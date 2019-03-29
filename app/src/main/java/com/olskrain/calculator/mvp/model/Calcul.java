@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Stack;
 
-import timber.log.Timber;
-
 /**
  * Created by Andrey Ievlev on 19,Март,2019
  */
@@ -109,7 +107,7 @@ public class Calcul {
             answer.replace("0.00000", "0");
         } else {
             answer = expression;
-       }
+        }
         return answer;
     }
 

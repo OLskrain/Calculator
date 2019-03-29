@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import timber.log.Timber;
-
 /**
  * Created by Andrey Ievlev on 19,Март,2019
  */
@@ -76,13 +74,13 @@ public class Expression {
                 list.set(i, "+");
                 break;
             } else if (list.get(i).equals("*") || list.get(i).equals("/")) {
-                String string = list.get(i + 1).replace("(-", "-").replace("(","").replace(")","");
+                String string = list.get(i + 1).replace("(-", "-").replace("(", "").replace(")", "");
                 list.set(i + 1, "(" + Integer.parseInt(string) * (-1) + ")");
                 break;
             } else if (list.get(i).equals("(")) {
                 list.set(i + 1, Integer.toString(Integer.parseInt(list.get(i + 1)) * (-1)));
                 break;
-            } else if (i == 0){
+            } else if (i == 0) {
                 list.set(i, Integer.toString(Integer.parseInt(list.get(i)) * (-1)));
             }
         }
@@ -105,53 +103,50 @@ public class Expression {
     }
 
     private void checkErrorTokens(int i) { //Проверка на две и более бинарных фунции или точки рядом
-            Timber.d("dsa начало");
-            //Todo: заменить на поток
-            String current = list.get(i);
+        //Todo: заменить на поток
+        String current = list.get(i);
 
-            if (isOperator(current)) { //проверка на то, есть ли вообше матет. действия
-                isMathOperator = true;
-                return;
+        if (isOperator(current)) { //проверка на то, есть ли вообше матет. действия
+            isMathOperator = true;
+            return;
+        }
+
+        if (isOperator(current) || isSeparator(current)) { //проверка на конструкции "MOMO", "MO.", "MO)", ".MO", "..", ".)" , где MO- математюоператор
+            if (list.size() > 1 && i < list.size() - 1) {
+                String next = list.get(i + 1);
+                if (isOperator(next) || isSeparator(next) || isCloseBracket(next)) {
+                    isErrorTokens = true;
+                    return;
+                }
             }
+        }
 
-            if (isOperator(current) || isSeparator(current)) { //проверка на конструкции "MOMO", "MO.", "MO)", ".MO", "..", ".)" , где MO- математюоператор
-                if (list.size() > 1 && i < list.size() - 1) {
-                    String next = list.get(i + 1);
-                    if (isOperator(next) || isSeparator(next) || isCloseBracket(next)) {
-                        isErrorTokens = true;
-                        return;
-                    }
+        if (isSeparator(current)) { //проверка на конструкцию ".("
+            if (list.size() > 1 && i < list.size() - 1) {
+                String next = list.get(i + 1);
+                if (isOpenBracket(next)) {
+                    isErrorTokens = true;
+                    return;
+                }
+            }
+        }
+
+        if (isNumber(current)) {  //проверка на конструкцию "n(", где n число
+            if (list.size() > 1 && i < list.size() - 1) {
+                String next = list.get(i + 1);
+                if (isOpenBracket(next)) {
+                    isErrorTokens = true;
+                    return;
                 }
             }
 
-            if (isSeparator(current)) { //проверка на конструкцию ".("
-                if (list.size() > 1 && i < list.size() - 1) {
-                    String next = list.get(i + 1);
-                    if (isOpenBracket(next)) {
-                        isErrorTokens = true;
-                        return;
-                    }
+            if (list.size() > 1 && i > 0) { //проверка на конструкцию ")n", где n число
+                String previous = list.get(i - 1);
+                if (isCloseBracket(previous)) {
+                    isErrorTokens = true;
                 }
             }
-
-            if (isNumber(current)) {  //проверка на конструкцию "n(", где n число
-                if (list.size() > 1 && i < list.size() - 1) {
-                    String next = list.get(i + 1);
-                    if (isOpenBracket(next)) {
-                        isErrorTokens = true;
-                        return;
-                    }
-                }
-
-                if (list.size() > 1 && i > 0) { //проверка на конструкцию ")n", где n число
-                    String previous = list.get(i - 1);
-                    if (isCloseBracket(previous)) {
-                        isErrorTokens = true;
-                        return;
-                    }
-                }
-                Timber.d("dsa конец");
-            }
+        }
     }
 
     private boolean checkErrorStartOrEnd() {  //проверка на наличие бинарной функции в начале или конце строки

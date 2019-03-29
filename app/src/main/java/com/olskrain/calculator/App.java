@@ -19,7 +19,7 @@ public class App extends Application {
         Timber.plant(new Timber.DebugTree());
     }
 
-    public static App getInstance(){
+    public static App getInstance() {
         return instance;
     }
 }

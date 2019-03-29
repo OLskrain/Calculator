@@ -7,7 +7,11 @@ import com.olskrain.calculator.mvp.model.Calcul;
 import com.olskrain.calculator.mvp.model.entity.Expression;
 import com.olskrain.calculator.mvp.view.MainView;
 
-import static com.olskrain.calculator.Command.*;
+import static com.olskrain.calculator.Command.ADD_TOKEN;
+import static com.olskrain.calculator.Command.CHANGE_SIGN;
+import static com.olskrain.calculator.Command.ClEAR;
+import static com.olskrain.calculator.Command.DELETE;
+import static com.olskrain.calculator.Command.GET_RESULT_ERROR;
 
 
 /**
@@ -27,15 +31,15 @@ public class MainPresenter extends MvpPresenter<MainView> {
             expression.addTokenToExpression(token);
             showResult(ADD_TOKEN);
             isResult = false;
-        }else {
+        } else {
             expression.addTokenToExpression(token);
             showResult(ADD_TOKEN);
             isResult = false;
         }
     }
 
-    public void changeExpression(Command command){
-        switch (command){
+    public void changeExpression(Command command) {
+        switch (command) {
             case DELETE:
                 expression.deleteTokenFromExpression();
                 showResult(DELETE);
@@ -47,8 +51,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
                 isResult = false;
                 break;
             case GET_RESULT:
-                if(!expression.getIsError()){
-                    try{
+                if (!expression.getIsError()) {
+                    try {
                         String st = calcul.RPNToAnswer(calcul.ExpressionToRPN(expression.showExpression()));
                         getViewState().showResult(st);
                         expression.clearExpression();
@@ -56,11 +60,11 @@ public class MainPresenter extends MvpPresenter<MainView> {
                         getViewState().showError("");
                         createExpression(st);
                         isResult = true;
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         showResult(GET_RESULT_ERROR);
                         e.printStackTrace();
                     }
-                }else {
+                } else {
                     showResult(GET_RESULT_ERROR);
                 }
                 break;
@@ -71,8 +75,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
         }
     }
 
-    private void showResult(Command command){
-        if (command.equals(GET_RESULT_ERROR)){
+    private void showResult(Command command) {
+        if (command.equals(GET_RESULT_ERROR)) {
             getViewState().showResult(expression.showExpression());
             getViewState().showError("Error");
         } else {
