@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Calculator</string>
+    <string name="app_name">Калькулятор</string>
 
     <string name="number_1">1</string>
     <string name="number_2">2</string>
@@ -26,8 +27,8 @@
     <string name="delete">DEL</string>
     <string name="ac">AC</string>
 
-    <string name="error_start_or_end">Error: Extra character at the beginning or at the end</string>
-    <string name="error_tokens">Error: Two or more characters together</string>
-    <string name="error_brackets">Error: Error in brackets</string>
-    <string name="arithmetic_error">Error: Arithmetic error</string>
+    <string name="error_start_or_end">Error: Лишний символ вначале или вконце</string>
+    <string name="error_tokens">Error: Два и более символа вместе</string>
+    <string name="error_brackets">Error: Ошибка в скобках</string>
+    <string name="arithmetic_error">Error: Арифметическая ошибка</string>
 </resources>

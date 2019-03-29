@@ -1,8 +1,13 @@
 package com.olskrain.calculator.ui;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.v4.content.ContextCompat;
 import android.text.method.ScrollingMovementMethod;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,14 +16,17 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.olskrain.calculator.Command;
+import com.olskrain.calculator.ErrorCode;
 import com.olskrain.calculator.R;
-import com.olskrain.calculator.mvp.model.Calcul;
 import com.olskrain.calculator.mvp.presenter.MainPresenter;
 import com.olskrain.calculator.mvp.view.MainView;
 
+import butterknife.BindColor;
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
+
+import static com.olskrain.calculator.ErrorCode.*;
 
 /**
  * Created by Andrey Ievlev on 19,Март,2019
@@ -73,76 +81,97 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     }
 
     private void initOnClick() {
-        numberOne.setOnClickListener(v -> { vibRun();
+        numberOne.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.number_1));
         });
-        numberTwo.setOnClickListener(v -> { vibRun();
+        numberTwo.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.number_2));
         });
-        numberThree.setOnClickListener(v -> { vibRun();
+        numberThree.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.number_3));
         });
-        numberFour.setOnClickListener(v -> { vibRun();
+        numberFour.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.number_4));
         });
-        numberFive.setOnClickListener(v -> { vibRun();
+        numberFive.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.number_5));
         });
-        numberSix.setOnClickListener(v -> { vibRun();
+        numberSix.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.number_6));
         });
-        numberSeven.setOnClickListener(v -> { vibRun();
+        numberSeven.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.number_7));
         });
-        numberEight.setOnClickListener(v -> { vibRun();
+        numberEight.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.number_8));
         });
-        numberNine.setOnClickListener(v -> { vibRun();
+        numberNine.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.number_9));
         });
-        numberZero.setOnClickListener(v -> { vibRun();
+        numberZero.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.number_0));
         });
 
-        bracketOpen.setOnClickListener(v -> { vibRun();
+        bracketOpen.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.symbol_bracket_open));
         });
-        bracketClose.setOnClickListener(v -> { vibRun();
+        bracketClose.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.symbol_bracket_close));
         });
-        multiplication.setOnClickListener(v -> { vibRun();
+        multiplication.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.symbol_multiplication2));
         });
-        division.setOnClickListener(v -> { vibRun();
+        division.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.symbol_division));
         });
-        plus.setOnClickListener(v -> { vibRun();
+        plus.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.symbol_plus));
         });
-        minus.setOnClickListener(v -> { vibRun();
+        minus.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.symbol_minus));
         });
-        point.setOnClickListener(v -> { vibRun();
+        point.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.createExpression(getResources().getString(R.string.symbol_point));
         });
 
-        equally.setOnClickListener(v -> { vibRun();
+        equally.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.changeExpression(Command.GET_RESULT);
         });
-        unaryMinus.setOnClickListener(v -> { vibRun();
+        unaryMinus.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.changeExpression(Command.CHANGE_SIGN);
         });
 
-        del.setOnClickListener(v -> { vibRun();
+        del.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.changeExpression(Command.DELETE);
         });
-        ac.setOnClickListener(v -> { vibRun();
+        ac.setOnClickListener(v -> {
+            vibRun();
             mainPresenter.changeExpression(Command.ClEAR);
         });
     }
 
-    private void vibRun(){
-        vib.vibrate(25);
+    private void vibRun() {
+        vib.vibrate(20);
     }
 
     @ProvidePresenter
@@ -156,7 +185,18 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     }
 
     @Override
-    public void showError(String error) {
-        mistake.setText(error);
+    public void showError(ErrorCode errorCode) {
+        //ToDo: разобраться с вибрацией при ошибке и добавить цвет
+        if (errorCode.equals(ERROR_START_OR_END)) {
+            mistake.setText(getString(R.string.error_start_or_end));
+        } else if (errorCode.equals(ERROR_TOKENS)) {
+            mistake.setText(getString(R.string.error_tokens));
+        } else if (errorCode.equals(ERROR_BRACKETS)) {
+            mistake.setText(getString(R.string.error_brackets));
+        } else if (errorCode.equals(ARITHMETIC_EXCEPTION)){
+            mistake.setText(getString(R.string.arithmetic_error));
+        } else if (errorCode.equals(NO_ERROR)){
+            mistake.setText("");
+        }
     }
 }

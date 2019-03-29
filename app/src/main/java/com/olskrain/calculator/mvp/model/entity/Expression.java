@@ -12,6 +12,48 @@ public class Expression {
     private boolean isError;
     private boolean isErrorTokens;
     private boolean isMathOperator;
+    private boolean isErrorBrackets;
+    private boolean isErrorStartOrEnd;
+
+    public boolean getIsError() {
+        return isError;
+    }
+
+    public void setError(boolean error) {
+        isError = error;
+    }
+
+    public boolean getIsErrorTokens() {
+        return isErrorTokens;
+    }
+
+    public void setErrorTokens(boolean errorTokens) {
+        isErrorTokens = errorTokens;
+    }
+
+    public boolean getIsMathOperator() {
+        return isMathOperator;
+    }
+
+    public void setMathOperator(boolean mathOperator) {
+        isMathOperator = mathOperator;
+    }
+
+    public boolean getIsErrorBrackets() {
+        return isErrorBrackets;
+    }
+
+    public void setErrorBrackets(boolean errorBrackets) {
+        isErrorBrackets = errorBrackets;
+    }
+
+    public boolean getIsErrorStartOrEnd() {
+        return isErrorStartOrEnd;
+    }
+
+    public void setErrorStartOrEnd(boolean errorStartOrEnd) {
+        isErrorStartOrEnd = errorStartOrEnd;
+    }
 
     private final String NUMBER = "0123456789";
     private final String OPERATORS = "+-*/";
@@ -37,18 +79,6 @@ public class Expression {
 
     public boolean isOperator(String token) {
         return OPERATORS.contains(token);
-    }
-
-    public boolean getIsError() {
-        return isError;
-    }
-
-    public List<String> getList() {
-        return list;
-    }
-
-    public void setError(boolean error) {
-        isError = error;
     }
 
     public void addTokenToExpression(String token) {
@@ -92,23 +122,21 @@ public class Expression {
             expression.append(list.get(i));
             checkError(i);
         }
-        isErrorTokens = false;
-        isMathOperator = false;
         return expression.toString();
     }
 
     private void checkError(int i) {
         checkErrorTokens(i);
-        isError = checkErrorStartOrEnd() || checkErrorBrackets() || isErrorTokens || !isMathOperator;
+        checkErrorBrackets();
+        checkErrorStartOrEnd();
+        isError = isErrorStartOrEnd || isErrorBrackets || isErrorTokens;
     }
 
     private void checkErrorTokens(int i) { //Проверка на две и более бинарных фунции или точки рядом
-        //Todo: заменить на поток
         String current = list.get(i);
 
         if (isOperator(current)) { //проверка на то, есть ли вообше матет. действия
             isMathOperator = true;
-            return;
         }
 
         if (isOperator(current) || isSeparator(current)) { //проверка на конструкции "MOMO", "MO.", "MO)", ".MO", "..", ".)" , где MO- математюоператор
@@ -149,35 +177,37 @@ public class Expression {
         }
     }
 
-    private boolean checkErrorStartOrEnd() {  //проверка на наличие бинарной функции в начале или конце строки
+    private void checkErrorStartOrEnd() {  //проверка на наличие бинарной функции в начале или конце строки
         if (list.size() > 0) {
             String finalValue = list.get(list.size() - 1);
             String initial = list.get(0);
-            return initial.equals("*") || initial.equals("/") || isSeparator(initial) ||
+            isErrorStartOrEnd = initial.equals("*") || initial.equals("/") || isSeparator(initial) ||
                     isOperator(finalValue) || isSeparator(finalValue);
         }
-        return false;
     }
 
-    private boolean checkErrorBrackets() { //проверка на кол-во и расположение скобок
+    //ToDO: посмотреть метод
+    private void checkErrorBrackets() { //проверка на кол-во и расположение скобок
         Stack<String> stack = new Stack<>();
 
-        for (int i = 0; i < list.size(); i++) { //Todo: заменить на поток
+        for (int i = 0; i < list.size(); i++) {
             String current = list.get(i);
 
             if (isOpenBracket(current)) {
                 stack.push(current);
             } else if (isCloseBracket(current)) {
                 if (stack.isEmpty()) {
-                    return true;
+                    isErrorBrackets = true;
+                    return;
                 }
 
                 String st = stack.pop();
                 if (!(isOpenBracket(st) && isCloseBracket(current))) {
-                    return true;
+                    isErrorBrackets = true;
+                    return;
                 }
             }
         }
-        return !stack.isEmpty();
+        isErrorBrackets = !stack.isEmpty();
     }
 }

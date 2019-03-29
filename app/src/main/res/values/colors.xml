@@ -7,4 +7,5 @@
 
     <color name="border_color">#AA00FF</color>
     <color name="background_border">#ffffff</color>
+    <color name="background_border_mistake">#ffffff</color>
 </resources>
