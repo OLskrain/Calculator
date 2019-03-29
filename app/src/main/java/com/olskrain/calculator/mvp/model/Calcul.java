@@ -11,7 +11,11 @@ import timber.log.Timber;
  */
 
 public class Calcul {
+    private boolean isArithmeticError = false;
+    private String expression;
+
     public String ExpressionToRPN(String expr) { //переводим выражение в обратную польскую натацию
+        this.expression = expr;
         StringBuilder current = new StringBuilder();
         Stack<String> stackOperation = new Stack<>();
 
@@ -61,7 +65,7 @@ public class Calcul {
         return current.toString();
     }
 
-    public String RPNToAnswer(String rpn) { //из обратной польской натации вычисляем ответ
+    public String RPNToAnswer(String rpn) throws ArithmeticException { //из обратной польской натации вычисляем ответ
         StringBuilder operand = new StringBuilder();
         Stack<Double> stackRPN = new Stack<>();
 
@@ -98,13 +102,13 @@ public class Calcul {
         }
 
         String answer;
-        if (!stackRPN.empty()) {
+        if (!stackRPN.empty() && !isArithmeticError) {
             BigDecimal bd = new BigDecimal(stackRPN.pop()).setScale(5, RoundingMode.HALF_UP).stripTrailingZeros();
             //TODO: разобраться с нулем
             answer = "" + bd.toPlainString();
             answer.replace("0.00000", "0");
         } else {
-            answer = "";
+            answer = expression;
        }
         return answer;
     }

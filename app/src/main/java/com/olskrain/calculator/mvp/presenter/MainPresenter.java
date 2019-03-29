@@ -50,13 +50,18 @@ public class MainPresenter extends MvpPresenter<MainView> {
                 break;
             case GET_RESULT:
                 if(!expression.getIsError()){
-                    String st = calcul.RPNToAnswer(calcul.ExpressionToRPN(expression.showExpression()));
-                    getViewState().showResult(st);
-                    expression.clearExpression();
-                    expression.setError(false);
-                    getViewState().showError("");
-                    createExpression(st);
-                    isResult = true;
+                    try{
+                        String st = calcul.RPNToAnswer(calcul.ExpressionToRPN(expression.showExpression()));
+                        getViewState().showResult(st);
+                        expression.clearExpression();
+                        expression.setError(false);
+                        getViewState().showError("");
+                        createExpression(st);
+                        isResult = true;
+                    }catch (Exception e){
+                        getViewState().showError("Error");
+                        e.printStackTrace();
+                    }
                 }else {
                     getViewState().showResult(expression.showExpression());
                     getViewState().showError("Error");
