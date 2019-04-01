@@ -3,6 +3,9 @@ package com.olskrain.calculator.mvp.model;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Stack;
+import java.util.Timer;
+
+import timber.log.Timber;
 
 /**
  * Created by Andrey Ievlev on 19,Март,2019
@@ -102,8 +105,7 @@ public class Calcul {
         String answer;
         if (!stackRPN.empty() && !isArithmeticError) {
             BigDecimal bd = new BigDecimal(stackRPN.pop()).setScale(5, RoundingMode.HALF_UP).stripTrailingZeros();
-            //TODO: разобраться с нулем
-            answer = "" + bd.toPlainString();
+            answer = bd.toPlainString().replace("0.00000","0");
         } else {
             answer = expression;
         }
