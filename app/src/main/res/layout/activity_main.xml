@@ -29,7 +29,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <TextView
+
+    <com.olskrain.calculator.mvp.model.ScrollingTextView
         android:id="@+id/mistake"
         android:layout_width="@dimen/tv_height_0dp"
         android:layout_height="wrap_content"
@@ -38,7 +39,10 @@
         android:layout_marginBottom="@dimen/margin_bottom_2dp"
         android:background="@drawable/mistake_border"
         android:elevation="@dimen/elevation_mistake"
-        android:maxLines="1"
+        android:singleLine="true"
+        android:scrollHorizontally="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
         android:paddingStart="@dimen/text_padding_start"
         android:paddingEnd="@dimen/text_padding_end"
         android:text=""

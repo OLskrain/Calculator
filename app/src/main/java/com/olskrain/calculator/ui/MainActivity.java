@@ -1,13 +1,9 @@
 package com.olskrain.calculator.ui;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
-import android.support.v4.content.ContextCompat;
 import android.text.method.ScrollingMovementMethod;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,8 +17,6 @@ import com.olskrain.calculator.R;
 import com.olskrain.calculator.mvp.presenter.MainPresenter;
 import com.olskrain.calculator.mvp.view.MainView;
 
-import butterknife.BindColor;
-import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -198,5 +192,17 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         } else if (errorCode.equals(NO_ERROR)){
             mistake.setText("");
         }
+    }
+
+    @Override
+    public void showRedScreen() {
+        answer.setBackground(getDrawable(R.drawable.text_view_border_red));
+        mistake.setBackground(getDrawable(R.drawable.mistake_border_red));
+        vib.vibrate(1000);
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            answer.setBackground(getDrawable(R.drawable.text_view_border));
+            mistake.setBackground(getDrawable(R.drawable.mistake_border));
+        }, 1000);
     }
 }

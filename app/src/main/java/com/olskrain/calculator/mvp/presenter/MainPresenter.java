@@ -78,11 +78,13 @@ public class MainPresenter extends MvpPresenter<MainView> {
                     } catch (Exception e) {
                         isArithmeticException = true;
                         updateStatusError();
+                        getViewState().showRedScreen();
                         showResult(GET_RESULT_ERROR);
                         e.printStackTrace();
                     }
                 } else {
                     updateStatusError();
+                    getViewState().showRedScreen();
                     showResult(GET_RESULT_ERROR);
                 }
                 break;

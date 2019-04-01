@@ -27,8 +27,8 @@
     <string name="delete">DEL</string>
     <string name="ac">AC</string>
 
-    <string name="error_start_or_end">Error: Лишний символ вначале или вконце</string>
-    <string name="error_tokens">Error: Два и более символа вместе</string>
-    <string name="error_brackets">Error: Ошибка в скобках</string>
-    <string name="arithmetic_error">Error: Арифметическая ошибка</string>
+    <string name="error_start_or_end">Ошибка в записи: Лишний символ вначале или вконце.</string>
+    <string name="error_tokens">Ошибка в записи: Несколько несовместимых символом рядом.</string>
+    <string name="error_brackets">Ошибка в записи: Не хватает скобок или нарушен их порядок.</string>
+    <string name="arithmetic_error">Ошибка в записи: Арифметическая ошибка.</string>
 </resources>

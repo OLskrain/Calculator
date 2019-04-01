@@ -26,8 +26,8 @@
     <string name="delete">DEL</string>
     <string name="ac">AC</string>
 
-    <string name="error_start_or_end">Error: Extra character at the beginning or at the end</string>
-    <string name="error_tokens">Error: Two or more characters together</string>
-    <string name="error_brackets">Error: Error in brackets</string>
-    <string name="arithmetic_error">Error: Arithmetic error</string>
+    <string name="error_start_or_end">Write error: Extra character at the beginning or at the end.</string>
+    <string name="error_tokens">Write error: Multiple incompatible character next.</string>
+    <string name="error_brackets">Write error: There are not enough brackets or their order is disturbed.</string>
+    <string name="arithmetic_error">Write error: Arithmetic error.</string>
 </resources>

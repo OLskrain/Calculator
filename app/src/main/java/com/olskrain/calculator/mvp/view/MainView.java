@@ -16,4 +16,6 @@ public interface MainView extends MvpView {
     void showResult(String result);
 
     void showError(ErrorCode errorCode);
+
+    void showRedScreen();
 }
